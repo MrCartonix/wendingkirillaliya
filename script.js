@@ -1,7 +1,7 @@
 async function sendData() {
     const btn = document.getElementById('submitBtn');
     
-    // Собираем данные
+    
     const name = document.getElementById('nameInput').value;
     const attendance = document.querySelector('input[name="attendance"]:checked').value;
     const guestInfo = document.getElementById('guestInput').value;
@@ -16,7 +16,7 @@ async function sendData() {
         return;
     }
 
-    // Визуальная индикация загрузки
+    
     btn.disabled = true;
     btn.innerText = "ОТПРАВКА...";
 
@@ -31,7 +31,7 @@ async function sendData() {
 
         if (response.ok) {
             alert("Спасибо! Ваш ответ отправлен.");
-            // Можно очистить форму
+            
         } else {
             throw new Error(result.error || "Ошибка соединения");
         }
