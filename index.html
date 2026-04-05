@@ -355,7 +355,7 @@
             document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
         }, 1000);
 
-        // БЕЗОПАСНАЯ ОТПРАВКА ФОРМЫ (через ваш API)
+        
         const rsvpForm = document.getElementById('rsvp-form');
         rsvpForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -372,7 +372,7 @@
             };
 
             try {
-                // Отправляем на ваш Vercel API (/api/submit.js)
+                
                 const response = await fetch('/api/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
