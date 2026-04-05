@@ -6,9 +6,9 @@ export default async function handler(req, res) {
     try {
         const { name, attendance, companion, drinks } = req.body;
 
-        // Эти данные мы возьмем из настроек Vercel (см. инструкцию ниже)
+        
         const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-        const CHAT_IDS = process.env.TELEGRAM_CHAT_IDS.split(','); // Список ID через запятую
+        const CHAT_IDS = process.env.TELEGRAM_CHAT_IDS.split(','); 
 
         let text = "💌 <b>Новая анкета гостя!</b>\n\n";
         text += `👤 <b>Имя:</b> ${name}\n`;
