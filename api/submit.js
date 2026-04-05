@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         if (companion) text += `👥 <b>Спутник:</b> ${companion}\n`;
         if (drinks && drinks.length > 0) text += `🍷 <b>Напитки:</b> ${drinks.join(', ')}\n`;
 
-        // Используем цикл, чтобы ошибка одного пользователя не ломала всё
+       
         for (const chatId of CHAT_IDS) {
             try {
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -27,12 +27,12 @@ export default async function handler(req, res) {
                     })
                 });
             } catch (err) {
-                // Если одному пользователю не отправилось, просто пишем в логи и идем дальше
+                
                 console.error(`Не удалось отправить сообщение пользователю ${chatId}:`, err);
             }
         }
 
-        // В любом случае возвращаем успех браузеру, так как форма заполнена
+       
         return res.status(200).json({ success: true });
 
     } catch (error) {
