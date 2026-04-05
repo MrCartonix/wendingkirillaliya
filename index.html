@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Кирилл и Алия - Приглашение на свадьбу</title>
+
+    <!-- Подключение шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Cutive+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --red-color: #9d171c;
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --font-main: 'Cormorant Garamond', serif;
+            --font-cursive: 'Great Vibes', cursive;
+            --font-typewriter: 'Cutive Mono', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #f7f7f7;
+            color: var(--text-color);
+            font-family: var(--font-main);
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-color);
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            padding-bottom: 50px;
+            overflow: hidden;
+        }
+
+        /* --- Мягкое появление блоков --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Типографика --- */
+        h1, h2, h3 { font-weight: 400; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        section { padding: 60px 20px; position: relative; z-index: 1; text-align: center; }
+
+        .title-date { font-size: clamp(1.1rem, 4vw, 1.4rem); margin-bottom: 15px; letter-spacing: 6px; text-align: center; }
+        .title-names { font-size: clamp(2.8rem, 11vw, 3.8rem); line-height: 1.1; margin-bottom: 5px; text-align: center; }
+        .cursive-accent { font-family: var(--font-cursive); color: var(--red-color); font-size: clamp(2rem, 7vw, 2.5rem); text-transform: none; margin-top: -10px; margin-bottom: 30px; text-align: center; }
+        .typewriter-text { font-family: var(--font-typewriter); font-size: clamp(0.85rem, 3.5vw, 0.95rem); line-height: 1.5; margin: 20px auto; text-align: center; max-width: 95%; }
+        .section-title { font-size: clamp(1.8rem, 7vw, 2.2rem); margin-bottom: 30px; text-align: center; }
+
+        img { width: 100%; height: auto; display: block; margin: 0 auto; filter: grayscale(100%); }
+        .img-wrapper { margin: 0 auto; display: block; position: relative; }
+        .cover-photo { width: 85%; }
+        .bg-line { position: absolute; z-index: 0; pointer-events: none; }
+
+        /* Конверт */
+        .envelope-container { position: relative; width: 90%; margin: 0 auto 50px; height: 250px; }
+        .envelope-back { position: absolute; top: 20px; left: 0; right: 0; height: 180px; background-color: var(--red-color); clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%); }
+        .envelope-card { position: absolute; top: 50px; left: 8%; right: 8%; background: #fff; padding: 25px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: var(--font-typewriter); font-size: clamp(0.8rem, 3vw, 0.9rem); line-height: 1.6; transform: rotate(-2deg); text-align: center; display: flex; align-items: center; justify-content: center; }
+
+        /* Календарь */
+        .calendar { width: 95%; margin: 0 auto; padding: 15px 0; display: grid; grid-template-columns: 1fr 1fr 1fr; text-align: center; position: relative; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+        .calendar::before, .calendar::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: #ddd; }
+        .calendar::before { left: 33.33%; }
+        .calendar::after { left: 66.66%; }
+        .cal-day { font-size: clamp(0.65rem, 2.5vw, 0.85rem); margin-bottom: 8px; font-family: var(--font-main); letter-spacing: 1px; }
+        .cal-month { font-family: var(--font-typewriter); font-size: clamp(0.8rem, 3vw, 0.95rem); font-weight: bold; margin-bottom: 5px; }
+        .cal-num { font-size: clamp(2.2rem, 8vw, 3.5rem); }
+
+        /* Сердце */
+        .heart-svg-container { position: absolute; width: 80px; height: 160px; top: 55%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
+        .animated-heart { width: 100%; height: 100%; }
+        .heart-path { stroke: var(--red-color); fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 400; stroke-dashoffset: 400; }
+        .heart-path-1 { stroke-width: 4; opacity: 0.85; }
+        .heart-path-2 { stroke-width: 2; opacity: 0.7; }
+        .heart-path-3 { stroke-width: 1.5; opacity: 0.9; }
+        .animated-heart.draw .heart-path-1 { animation: drawHeart 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .animated-heart.draw .heart-path-2 { animation: drawHeart 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.1s; }
+        .animated-heart.draw .heart-path-3 { animation: drawHeart 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.2s; }
+        @keyframes drawHeart { 0% { stroke-dashoffset: 400; } 100% { stroke-dashoffset: 0; } }
+
+        .btn { display: inline-block; background-color: var(--red-color); color: #fff; text-decoration: none; padding: 15px 35px; font-family: var(--font-main); font-size: clamp(1rem, 4vw, 1.1rem); letter-spacing: 2px; margin: 25px auto 0; border: none; cursor: pointer; transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; width: 90%; max-width: 300px; text-align: center; }
+        .btn:hover:not(:disabled) { background-color: #7a1014; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(157, 23, 28, 0.3); }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* Тайминг */
+        .timing-container { display: flex; justify-content: center; gap: 10px; align-items: flex-start; flex-wrap: wrap; margin-top: 30px; border-top: 1px solid var(--red-color); padding-top: 30px; }
+        .timing-item { width: 45%; padding: 0 5px; margin-bottom: 20px; text-align: center; }
+        .time { font-size: clamp(1.4rem, 6vw, 1.8rem); margin-bottom: 5px; font-style: italic; }
+        .time-desc { font-family: var(--font-typewriter); font-size: clamp(0.7rem, 3vw, 0.75rem); }
+
+        /* Дресс-код палитра */
+        .palette { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 30px auto; max-width: 80%; }
+        .color-circle { width: clamp(35px, 10vw, 45px); height: clamp(35px, 10vw, 45px); border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .c1 { background-color: #e6cfbe; } .c2 { background-color: #cda892; } .c3 { background-color: #8d5d3a; } .c4 { background-color: #4a2e15; } .c5 { background-color: #000000; }
+
+        .wish-card { background-color: #fff; padding: 25px 15px; border: 1px solid #f0f0f0; box-shadow: 0 8px 30px rgba(0,0,0,0.05); position: relative; text-align: center; margin-bottom: 20px; }
+        .wish-card::before, .wish-card::after { content: ''; position: absolute; width: 15px; height: 15px; border: 1px solid var(--red-color); }
+        .wish-card::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .wish-card::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        /* Таймер */
+        .timer { display: flex; justify-content: center; gap: 10px; margin: 30px auto 0; }
+        .timer-box { text-align: center; flex: 1; }
+        .timer-num { font-size: clamp(1.8rem, 7vw, 2.8rem); font-weight: 300; }
+        .timer-label { font-family: var(--font-typewriter); font-size: clamp(0.65rem, 2.5vw, 0.75rem); letter-spacing: 1px; color: #555; }
+
+        /* RSVP Форма */
+        .form-group { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; }
+        .form-label { display: block; font-size: clamp(1rem, 4vw, 1.2rem); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        input[type="text"] { width: 95%; padding: 15px; border: 1px solid #ddd; border-radius: 6px; background-color: #fafafa; font-family: var(--font-typewriter); font-size: 16px; outline: none; transition: all 0.3s ease; text-align: center; }
+        input[type="text"]:focus { border-color: var(--red-color); background-color: #fff; box-shadow: 0 4px 12px rgba(157, 23, 28, 0.1); }
+
+        .radio-group, .checkbox-group { display: inline-flex; flex-direction: column; align-items: flex-start; margin: 0 auto; font-family: var(--font-typewriter); gap: 12px; width: 90%; }
+        .custom-control { display: flex; align-items: center; cursor: pointer; font-size: clamp(0.85rem, 3.5vw, 0.95rem); text-align: left;}
+        .custom-control input { appearance: none; min-width: 22px; width: 22px; height: 22px; border: 1px solid #999; margin-right: 12px; display: grid; place-content: center; transition: border 0.3s; }
+        .custom-control input[type="radio"] { border-radius: 50%; }
+        .custom-control input::before { content: ""; width: 12px; height: 12px; background-color: var(--red-color); transform: scale(0); transition: 0.2s transform ease-in-out; }
+        .custom-control input:checked::before { transform: scale(1); }
+        .custom-control input:checked { border-color: var(--red-color); }
+
+        .success-message { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); background: #fff; z-index: 10; padding: 20px; }
+        .success-message.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .success-icon { font-size: 3.5rem; color: var(--red-color); margin-bottom: 15px; font-family: var(--font-cursive); }
+
+        @media (max-width: 400px) {
+            section { padding: 40px 15px; }
+            .envelope-container { height: 210px; }
+            .timing-item { width: 100%; border-bottom: 1px dashed #eee; padding-bottom: 15px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Декоративная линия -->
+        <svg class="bg-line" style="top: 10%; left: -20%; width: 140%; height: 300px;" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0,50 Q25,0 50,50 T100,50" fill="none" stroke="#9d171c" stroke-width="0.15"/>
+        </svg>
+
+        <!-- 1. Обложка -->
+        <section class="fade-in">
+            <div class="title-date">07 &middot; 08 &middot; 26</div>
+            <h1 class="title-names">КИРИЛЛ &<br>АЛИЯ</h1>
+            <div class="cursive-accent">Our wedding day!</div>
+            <div class="img-wrapper cover-photo">
+                <img src="photo1.jpg" alt="Кирилл и Алия">
+            </div>
+        </section>
+
+        <!-- 2. Приглашение -->
+        <section class="fade-in">
+            <h2 class="section-title">ДОРОГИЕ ДРУЗЬЯ!</h2>
+            <div class="envelope-container">
+                <div class="envelope-back"></div>
+                <div class="envelope-card">
+                    <div>
+                        Это официальное приглашение на<br> нашу свадьбу! А получили вы его<br> потому, что мы очень хотим видеть<br> вас в этот день рядом с нами!
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar" id="calendar-section">
+                <div>
+                    <div class="cal-day">ЧЕТВЕРГ</div>
+                    <div class="cal-month">Август</div>
+                    <div class="cal-num">06</div>
+                </div>
+                <div style="position: relative;">
+                    <div class="cal-day">ПЯТНИЦА</div>
+                    <div class="cal-month">Август</div>
+                    <div class="cal-num">07</div>
+                    <!-- Сердце -->
+                    <div class="heart-svg-container">
+                        <svg class="animated-heart" viewBox="0 0 100 100" id="drawing-heart">
+                            <path class="heart-path heart-path-1" d="M 48,82 C 10,50 5,20 25,10 C 40,0 50,20 50,30 C 50,20 60,0 75,10 C 95,20 85,50 48,82" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <div class="cal-day">СУББОТА</div>
+                    <div class="cal-month">Август</div>
+                    <div class="cal-num">08</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Место проведения -->
+        <section class="fade-in">
+            <h2 class="section-title">МЕСТО ПРОВЕДЕНИЯ</h2>
+            <div class="cursive-accent">Save the place!</div>
+            <div class="typewriter-text">
+                г. Стерлитамак, ул. Комсомольская, д.84.<br> Ресторан ОРИЕНТ SMART HALL
+            </div>
+            <div class="img-wrapper" style="width: 50%; margin: 30px auto;">
+                <img src="photo4.jpg" alt="Локация">
+            </div>
+            <a href="https://yandex.ru/maps/-/CPeKEA5X" target="_blank" class="btn">КАК ДОБРАТЬСЯ</a>
+        </section>
+
+        <!-- 4. Тайминг -->
+        <section class="fade-in">
+            <h2 class="section-title">ТАЙМИНГ</h2>
+            <div class="cursive-accent">Of the day</div>
+            <div class="timing-container">
+                <div class="timing-item">
+                    <div class="time">11:45</div>
+                    <div class="time-desc">Регистрация в Загсе</div>
+                </div>
+                <div class="timing-item">
+                    <div class="time">13:30</div>
+                    <div class="time-desc">Фотосессия на Торатау</div>
+                </div>
+                <div class="timing-item">
+                    <div class="time">16:00</div>
+                    <div class="time-desc">Банкет в ресторане</div>
+                </div>
+                <div class="timing-item">
+                    <div class="time">23:00</div>
+                    <div class="time-desc">Завершение вечера</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Дресс-код -->
+        <section class="fade-in">
+            <h2 class="section-title">ДРЕСС-КОД</h2>
+            <div class="typewriter-text">
+                Мы очень ждём и готовимся к нашему незабываемому дню! Поддержите нас вашими нарядами в палитре мероприятия:
+            </div>
+            <div class="palette">
+                <div class="color-circle c1"></div>
+                <div class="color-circle c2"></div>
+                <div class="color-circle c3"></div>
+                <div class="color-circle c4"></div>
+                <div class="color-circle c5"></div>
+            </div>
+        </section>
+
+        <!-- 6. Таймер -->
+        <section class="fade-in" style="background-color: #fafafa;">
+            <h2 class="section-title">ДО СВАДЬБЫ ОСТАЛОСЬ</h2>
+            <div class="timer">
+                <div class="timer-box"><div class="timer-num" id="days">00</div><div class="timer-label">Дней</div></div>
+                <div class="timer-box"><div class="timer-num" id="hours">00</div><div class="timer-label">Часов</div></div>
+                <div class="timer-box"><div class="timer-num" id="minutes">00</div><div class="timer-label">Минут</div></div>
+                <div class="timer-box"><div class="timer-num" id="seconds">00</div><div class="timer-label">Секунд</div></div>
+            </div>
+        </section>
+
+        <!-- 7. Анкета -->
+        <section class="fade-in rsvp-wrapper">
+            <div class="wish-card" style="min-height: 550px;">
+                <div id="form-container">
+                    <h2 class="section-title">АНКЕТА ГОСТЯ</h2>
+                    <p class="typewriter-text">Пожалуйста, подтвердите присутствие до 15 июля 2026</p>
+                    
+                    <form class="rsvp-form" id="rsvp-form">
+                        <div class="form-group">
+                            <label class="form-label">ВАШЕ ИМЯ И ФАМИЛИЯ</label>
+                            <input type="text" name="Имя" placeholder="Напишите здесь..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ПРИДЕТЕ ЛИ ВЫ?</label>
+                            <div class="radio-group">
+                                <label class="custom-control"><input type="radio" name="Присутствие" value="Да, приду" required> С удовольствием приду!</label>
+                                <label class="custom-control"><input type="radio" name="Присутствие" value="Нет, не смогу"> К сожалению, не смогу</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ИМЯ СПУТНИКА (если есть)</label>
+                            <input type="text" name="Спутник" placeholder="Если будете не одни...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ВАШИ ПРЕДПОЧТЕНИЯ</label>
+                            <div class="checkbox-group">
+                                <label class="custom-control"><input type="checkbox" name="Напиток" value="Шампанское"> Шампанское</label>
+                                <label class="custom-control"><input type="checkbox" name="Напиток" value="Вино"> Вино</label>
+                                <label class="custom-control"><input type="checkbox" name="Напиток" value="Крепкое"> Крепкий алкоголь</label>
+                                <label class="custom-control"><input type="checkbox" name="Напиток" value="Не пью"> Не пью алкоголь</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn">ПОДТВЕРДИТЬ</button>
+                    </form>
+                </div>
+
+                <div class="success-message" id="success-message">
+                    <div class="success-icon">With love</div>
+                    <h2 class="section-title">СПАСИБО!</h2>
+                    <p class="typewriter-text">Ваши ответы отправлены.<br>Ждем встречи!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Футер -->
+        <section class="fade-in">
+            <h2 class="title-names">КИРИЛЛ<br>&<br>АЛИЯ</h2>
+            <div class="img-wrapper cover-photo">
+                <img src="photo2.jpg" alt="Конец">
+            </div>
+            <div style="color: var(--red-color); font-size: 1.5rem; margin-top: 20px;">&hearts; &hearts; &hearts;</div>
+        </section>
+    </div>
+
+    <script>
+        // Анимации появления
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('is-visible');
+            });
+        }, { threshold: 0.1 });
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Анимация сердца
+        const heartObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) document.getElementById('drawing-heart').classList.add('draw');
+            });
+        }, { threshold: 0.5 });
+        heartObserver.observe(document.getElementById('calendar-section'));
+
+        // Таймер обратного отсчета
+        const weddingDate = new Date(2026, 7, 7, 16, 0).getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = weddingDate - now;
+            if (diff < 0) return;
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }, 1000);
+
+        // БЕЗОПАСНАЯ ОТПРАВКА ФОРМЫ (через ваш API)
+        const rsvpForm = document.getElementById('rsvp-form');
+        rsvpForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = rsvpForm.querySelector('button');
+            btn.innerText = 'ОТПРАВКА...';
+            btn.disabled = true;
+
+            const formData = new FormData(rsvpForm);
+            const data = {
+                name: formData.get('Имя'),
+                attendance: formData.get('Присутствие'),
+                companion: formData.get('Спутник'),
+                drinks: formData.getAll('Напиток')
+            };
+
+            try {
+                // Отправляем на ваш Vercel API (/api/submit.js)
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    document.getElementById('form-container').style.display = 'none';
+                    document.getElementById('success-message').classList.add('show');
+                } else {
+                    throw new Error();
+                }
+            } catch {
+                alert("Ошибка соединения. Пожалуйста, попробуйте еще раз.");
+                btn.innerText = 'ПОДТВЕРДИТЬ';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
