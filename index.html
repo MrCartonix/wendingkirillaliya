@@ -255,16 +255,17 @@
         </section>
 
         <!-- 6. Пожелания -->
-        <section class="fade-in">
-            <h2 class="section-title">ПОЖЕЛАНИЯ</h2>
+        <section class="fade-in" style="background-color: #9d171c">
+            <h2 class="section-title"><span style="color: rgb(255, 255, 255);">ПОЖЕЛАНИЯ</span></h2>
             <div class="typewriter-text">
-             Просим вас поддержать нашу идею: вместо отдельных букетов мы будем рады  одному белому цветку. Из них сложится наш общий свадебный букет, который останется в памяти навсегда!<br>
+             <span style="color: rgb(255, 255, 255);">1. &#129293 Просим вас поддержать нашу идею: вместо отдельных букетов мы будем рады  одному белому цветку. Из них сложится наш общий свадебный букет, который останется в памяти навсегда!<br>
              <br>
-             Пусть ваше поздравление станет частичкой нашей семейной истории! 
+             2. &#128140 Пусть ваше поздравление станет частичкой нашей семейной истории! 
              Напишите несколько тёплых строк от руки, вложите их в конверт — и мы сохраним эти искренние слова, чтобы перечитывать их в годовщину, в трудные минуты и просто тогда, когда захочется ощутить вашу любовь и поддержку снова!
+             </span>
             </div>
         </section>
-        
+
         <!-- 7. Таймер -->
         <section class="fade-in" style="background-color: #fafafa;">
             <h2 class="section-title">ДО СВАДЬБЫ ОСТАЛОСЬ</h2>
@@ -366,7 +367,7 @@
             document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
         }, 1000);
 
-        
+        // БЕЗОПАСНАЯ ОТПРАВКА ФОРМЫ (через ваш API)
         const rsvpForm = document.getElementById('rsvp-form');
         rsvpForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -383,7 +384,7 @@
             };
 
             try {
-                
+                // Отправляем на ваш Vercel API (/api/submit.js)
                 const response = await fetch('/api/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
